@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Shuffle, ArrowDownUp } from 'lucide-react';
+import { Shuffle, RefreshCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface HeaderControlsProps {
@@ -21,14 +21,11 @@ interface HeaderControlsProps {
  */
 const HeaderControls: React.FC<HeaderControlsProps> = ({ onShuffle, onReset, className }) => {
   return (
-    <div className={cn('flex items-center gap-2', className)}>
-      <Button variant="secondary" size="sm" onClick={onShuffle}>
-        <Shuffle className="mr-2 h-4 w-4" />
+    <div className={cn('flex items-center gap-2', className)}>\n      <Button variant=\"secondary\" size=\"sm\" onClick={onShuffle}>\n        <Shuffle className=\"mr-2 h-4 w-4\" />
         Shuffle
       </Button>
-      <Button variant="secondary" size="sm" onClick={onReset}>
-        <ArrowDownUp className="mr-2 h-4 w-4" />
-        Sort
+      <Button variant=\"secondary\" size=\"sm\" onClick={onReset}>\n        <RefreshCcw className=\"mr-2 h-4 w-4\" />
+        Reset Deck
       </Button>
     </div>
   );
