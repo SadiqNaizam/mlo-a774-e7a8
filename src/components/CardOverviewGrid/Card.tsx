@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Heart, Diamond, Spade, Club } from 'lucide-react';
 
@@ -9,6 +10,7 @@ export interface CardProps {
   suit: Suit;
   value: Value;
   className?: string;
+  onClick?: () => void;
 }
 
 const suitConfig: Record<Suit, { Icon: React.ElementType; color: string }> = {
@@ -18,13 +20,19 @@ const suitConfig: Record<Suit, { Icon: React.ElementType; color: string }> = {
   Spades: { Icon: Spade, color: 'text-foreground' },
 };
 
-const Card: React.FC<CardProps> = ({ suit, value, className }) => {
+const Card: React.FC<CardProps> = ({ suit, value, className, onClick }) => {
   const { Icon, color } = suitConfig[suit];
 
   return (
-    <div
+    <motion.div
+      layout
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
+      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+      onClick={onClick}
       className={cn(
-        'relative flex aspect-[2.5/3.5] w-full items-center justify-center rounded-lg border bg-card p-2 shadow-sm transition-transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-lg',
+        'relative flex aspect-[2.5/3.5] w-full cursor-pointer items-center justify-center rounded-lg border bg-card p-2 shadow-sm transition-shadow duration-200 ease-in-out hover:shadow-lg',
         className
       )}
     >
@@ -37,7 +45,7 @@ const Card: React.FC<CardProps> = ({ suit, value, className }) => {
       <div className={cn('absolute bottom-1 right-1.5 rotate-180 font-bold text-base md:bottom-1.5 md:right-2 md:text-xl', color)}>
         {value}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
