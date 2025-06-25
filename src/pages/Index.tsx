@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import Header from '@/components/layout/Header';
 import Card, { type CardProps, type Suit, type Value } from '@/components/CardOverviewGrid/Card';
 
@@ -22,7 +23,7 @@ const initialDeck = generateInitialDeck();
 /**
  * The main page component for the Deck of Cards UI application.
  * It orchestrates the display and interaction with the deck, featuring
- * controls for shuffling and sorting the cards in the grid.
+ * controls for shuffling, resetting, and "playing" (removing) cards from the grid.
  */
 const IndexPage: React.FC = () => {
   const [deck, setDeck] = useState<CardProps[]>(initialDeck);
@@ -43,20 +44,40 @@ const IndexPage: React.FC = () => {
   }, []);
 
   /**
-   * Resets the deck of cards to its original, sorted state.
+   * Resets the deck of cards to its original, full, and sorted state.
    */
   const handleReset = useCallback(() => {
     setDeck(initialDeck);
   }, []);
+
+  /**
+   * Handles a card being clicked, which removes it from the current deck.
+   * @param {CardProps} cardToRemove The card object to remove from the deck.
+   */
+  const handleCardClick = useCallback((cardToRemove: CardProps) => {
+    setDeck(currentDeck =>
+      currentDeck.filter(
+        card => !(card.suit === cardToRemove.suit && card.value === cardToRemove.value),
+      ),
+    );
+  }, []);
+
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-background text-foreground">
       <Header onShuffle={handleShuffle} onReset={handleReset} />
       <main className="flex-1 p-4 md:p-6">
         <div className="grid grid-cols-13 gap-2 sm:gap-4">
-          {deck.map(({ suit, value }) => (
-            <Card key={`${suit}-${value}`} suit={suit} value={value} />
-          ))}
+          <AnimatePresence>
+            {deck.map(({ suit, value }) => (
+              <Card 
+                key={`${suit}-${value}`} 
+                suit={suit} 
+                value={value} 
+                onClick={() => handleCardClick({ suit, value })}
+              />
+            ))}
+          </AnimatePresence>
         </div>
       </main>
     </div>
